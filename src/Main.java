@@ -12,21 +12,23 @@ public class Main extends Application
 {
     private final int WIDTH = 555;
     private final int HEIGHT = 333;
-    VBox vbox = new VBox();
-    Scene mainScene = new Scene(vbox, WIDTH, HEIGHT);
-
-    public Main(){}
-
+    
+    
     @Override
     public void start(Stage primaryStage) throws Exception 
     {
-        Scene homeScene = new Scene(Home.homelayout(primaryStage, mainScene), WIDTH, HEIGHT);
+        VBox vbox = new VBox();
+        Scene mainScene = new Scene(vbox, WIDTH, HEIGHT);
+        Scene homeScene = Home.scene(primaryStage, mainScene);
+        Scene timerScene = Info.scene(primaryStage, mainScene);
         primaryStage.setScene(mainScene);
         primaryStage.setTitle("Main");
         primaryStage.show();
 
 
         Button mainButton = new Button("change to Home");
+        Button timerButton = new Button("change to Timer pane");
+        
         mainButton.setOnAction(event -> 
         {
             primaryStage.setScene(homeScene);
@@ -34,21 +36,18 @@ public class Main extends Application
             
         });
 
-        // Button homeButton = new Button("change to Home");
-        // homeButton.setOnAction(event -> 
-        // {
-        //     primaryStage.setScene(mainScene);
-        //     primaryStage.setTitle("Main");
+        timerButton.setOnAction(event -> 
+        {
+            primaryStage.setScene(timerScene);
+            primaryStage.setTitle("Timer");
+            Timer.timeline.play();
             
-        // });
-        
+        });
+   
+    
         vbox.setAlignment(Pos.CENTER);
-        vbox.getChildren().add(mainButton);
+        vbox.getChildren().addAll(mainButton, timerButton);
     }
-
-    public Scene getScene() {return mainScene;}
-
-
 
     public static void main(String[] args) 
     {launch(args);}

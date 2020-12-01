@@ -8,9 +8,11 @@ import javafx.scene.layout.VBox;
 //Here the all layouts of the home page
 public abstract class  Home extends Application
 {
+    private static final int WIDTH = 555;
+    private static final int HEIGHT = 333;
     protected static VBox vbox = new VBox();
     
-    public static VBox homelayout(Stage primaryStage, Scene scene)
+    public static Scene scene(Stage primaryStage, Scene scene)
     {
         Button testButton = new Button("change to Main");
         testButton.setOnAction(event -> 
@@ -22,7 +24,7 @@ public abstract class  Home extends Application
         vbox.setAlignment(Pos.CENTER);
         vbox.getChildren().add(testButton);
         
-        return vbox;
+        return new Scene(vbox, WIDTH, HEIGHT);
     }
     
 }
