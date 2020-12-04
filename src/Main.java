@@ -20,7 +20,7 @@ public class Main extends Application
         VBox vbox = new VBox();
         Scene mainScene = new Scene(vbox, WIDTH, HEIGHT);
         Scene homeScene = Home.scene(primaryStage, mainScene);
-        Scene timerScene = Info.scene(primaryStage, mainScene);
+        Scene timerScene = Game.scene(primaryStage, mainScene);
         primaryStage.setScene(mainScene);
         primaryStage.setTitle("Main");
         primaryStage.show();
@@ -40,7 +40,7 @@ public class Main extends Application
         {
             primaryStage.setScene(timerScene);
             primaryStage.setTitle("Timer");
-            Timer.timeline.play();
+            Game.timeline.play();
             
         });
    

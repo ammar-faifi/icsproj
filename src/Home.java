@@ -14,7 +14,8 @@ public abstract class  Home extends Application
     
     public static Scene scene(Stage primaryStage, Scene scene)
     {
-        Button testButton = new Button("change to Main");
+        Button testButton = new Button("Start !");
+        
         testButton.setOnAction(event -> 
         {
             primaryStage.setScene(scene);

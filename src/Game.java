@@ -21,7 +21,7 @@ import javafx.scene.layout.StackPane;
 
 //This class is responsible for the info data:  timer, scores, and top score  
 
-public abstract class Info 
+public abstract class Game 
 {
     private static final int WIDTH = 555;
     private static final int HEIGHT = 333;
