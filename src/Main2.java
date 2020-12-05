@@ -29,15 +29,15 @@ public class Main2 extends Application {
     private Scene ss=new Scene(root, 800, 550);
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("Hello World");
+    public void start(Stage primaryStage) throws Exception 
+    {
         ArrayList<Tile> tiles = new ArrayList<>();
 
 
         Image[] puzz = new Image[num_of_pairs];
 
         for (int i = 0; i < puzz.length; i++) {
-            puzz[i] = new Image("file:C:\\Users\\abdlr\\IdeaProjects\\Final_project\\src\\sample\\cat" + i + ".jpeg");
+            puzz[i] = new Image(new File(i + ".jpeg").toURI().toString());
         }
 
 
@@ -126,6 +126,10 @@ public class Main2 extends Application {
 
         public void handleMouseClick(MouseEvent event) 
         {
+            File alertF = new File("select.wav");
+            MediaPlayer alert = new MediaPlayer(new Media(alertF.toURI().toString()));
+            alert.play();
+            alert.setVolume(0.8);
 
             if (isOpen() || clickCount == 0)
                 return;
@@ -149,9 +153,8 @@ public class Main2 extends Application {
 
                     else
                     {
-                        File f=new File("C:\\Users\\abdlr\\IdeaProjects\\Final_project\\src\\sample\\Mario-coin-sound.mp3");
-                        Media n = new Media(f.toURI().toString());
-                        MediaPlayer mp = new MediaPlayer(n);
+                        File f = new File("win.wav");
+                        MediaPlayer mp = new MediaPlayer(new Media(f.toURI().toString()));
                         mp.play();
                         mp.setVolume(0.8);
                     }
