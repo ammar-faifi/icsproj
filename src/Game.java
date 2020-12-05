@@ -25,9 +25,11 @@ public abstract class Game
 {
     private static final int WIDTH = 555;
     private static final int HEIGHT = 333;
-    private static Date date = new Date();
     private static Label timerLabel = new Label();
     protected static Timeline timeline;
+    protected static int startSecond;
+    protected static int startMinute;
+    protected static boolean stop = true;
 
 
     protected static Scene scene(Stage primaryStage, Scene scene) throws Exception 
@@ -36,25 +38,34 @@ public abstract class Game
                
         timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             
-            Calendar cal = Calendar.getInstance();
             Date date = new Date();
-            
+            Calendar cal = Calendar.getInstance();
+            if (stop)
+                {
+                    startSecond = cal.get(Calendar.SECOND);
+                    startMinute = cal.get(Calendar.MINUTE);
+                    stop = false;
+                }
             // timerLabel.setText( (new Date(date.getTime() - startTime)).toString() );
 
-            timerLabel.setText(cal.get(Calendar.MINUTE) + ":" + cal.get(Calendar.SECOND));
+            timerLabel.setText((cal.get(Calendar.MINUTE) - startMinute) + ":" 
+                + (cal.get(Calendar.SECOND) - startSecond));
             System.out.print("Running...");
             
         }));
+        timeline.setCycleCount(Animation.INDEFINITE);
         
-        Button testButton = new Button("change to Main");
+
+
+        Button testButton = new Button("END the Game !!");
         testButton.setOnAction(event -> 
         {
             timeline.pause();
             primaryStage.setScene(scene);
-            primaryStage.setTitle("Main");
+            primaryStage.setTitle("Home");
+            stop = true;
         });
         
-        timeline.setCycleCount(Animation.INDEFINITE);
         
         pane.getChildren().addAll(timerLabel, testButton);
         pane.setAlignment(Pos.CENTER);

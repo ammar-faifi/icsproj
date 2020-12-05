@@ -10,43 +10,24 @@ import javafx.geometry.Pos;
 
 public class Main extends Application 
 {
-    private final int WIDTH = 555;
-    private final int HEIGHT = 333;
-    
-    
+    private final int WIDTH = 666;
+    private final int HEIGHT = 666;
+
     @Override
     public void start(Stage primaryStage) throws Exception 
     {
         VBox vbox = new VBox();
-        Scene mainScene = new Scene(vbox, WIDTH, HEIGHT);
-        Scene homeScene = Home.scene(primaryStage, mainScene);
-        Scene timerScene = Game.scene(primaryStage, mainScene);
-        primaryStage.setScene(mainScene);
-        primaryStage.setTitle("Main");
+
+        Scene gameScene = Game.scene(primaryStage, homeScene);
+        Scene homeScene = Home.scene(primaryStage, gameScene);
+        
+        primaryStage.setScene(homeScene);
+        primaryStage.setTitle("Home | V0.1-beta");
         primaryStage.show();
 
-
-        Button mainButton = new Button("change to Home");
-        Button timerButton = new Button("change to Timer pane");
-        
-        mainButton.setOnAction(event -> 
-        {
-            primaryStage.setScene(homeScene);
-            primaryStage.setTitle("Home");
-            
-        });
-
-        timerButton.setOnAction(event -> 
-        {
-            primaryStage.setScene(timerScene);
-            primaryStage.setTitle("Timer");
-            Game.timeline.play();
-            
-        });
-   
     
         vbox.setAlignment(Pos.CENTER);
-        vbox.getChildren().addAll(mainButton, timerButton);
+        vbox.getChildren().addAll();
     }
 
     public static void main(String[] args) 
