@@ -26,5 +26,10 @@
 #game-header
 {
     -fx-background-color: rgb(218, 218, 218);
-    -fx-scale-y: 1.5
+    -fx-scale-y: 1
+}
+
+#start-game
+{
+    -fx-background-color: white;
 }

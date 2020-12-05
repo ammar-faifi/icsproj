@@ -48,6 +48,7 @@ public abstract class Game
             + (cal.get(Calendar.SECOND) - startSecond));
             System.out.println("Running...");
             
+            
         }));
         timeline.setCycleCount(Animation.INDEFINITE);
         
