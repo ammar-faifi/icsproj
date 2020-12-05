@@ -1,0 +1,30 @@
+.root
+{
+    
+}
+
+#home-background-img
+{
+    -fx-opacity: 0.2;
+    -fx-rotate: 0.5;
+}
+
+.button
+{
+    -fx-background-weight: bold;
+    -fx-background-radius: 10;
+    -fx-text-fill: gray;
+    -fx-scale-y: 1;
+    -fx-cursor: hand;
+}
+
+.button:pressed
+{
+    -fx-translate-y:2px;
+}
+
+#game-header
+{
+    -fx-background-color: rgb(218, 218, 218);
+    -fx-scale-y: 1.5
+}

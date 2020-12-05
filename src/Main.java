@@ -14,23 +14,27 @@ import javafx.geometry.Pos;
 public class Main extends Application 
 {
     protected static final int WIDTH = 666;
-    protected static final int HEIGHT = 777;
+    protected static final int HEIGHT = 677;
     private VBox vbox = new VBox(50);
+    private StackPane pane = new StackPane();
 
 
     @Override
     public void start(Stage primaryStage) throws Exception 
     {
-        Scene homeScene = new Scene(vbox, WIDTH, HEIGHT);
+        Scene homeScene = new Scene(pane, WIDTH, HEIGHT);
         Scene gameScene = Game.scene(primaryStage, homeScene);
-        primaryStage.setScene(homeScene);
-        primaryStage.setTitle("Home | V0.1-beta");
-        primaryStage.show();
 
         // Layout objects
         ImageView img = new ImageView(new Image("proj.png"));
         img.setFitWidth(WIDTH/2);
-        img.setFitHeight(WIDTH/2);
+        img.setFitHeight(HEIGHT/2);
+
+        // ImageView background = new ImageView(new Image("background.png"));
+        ImageView background = new ImageView(new Image("background.png"));
+        background.setId("home-background-img");
+        background.setFitWidth(WIDTH);
+        background.setFitHeight(HEIGHT);
 
         Button testButton = new Button("Start the Game Now!");
 
@@ -43,7 +47,14 @@ public class Main extends Application
         
         vbox.setAlignment(Pos.CENTER);
         vbox.getChildren().addAll(img, testButton);
-
+        pane.getChildren().addAll(background, vbox);
+        
+        homeScene.getStylesheets().add("style.css");
+        gameScene.getStylesheets().add("style.css");
+        primaryStage.setScene(homeScene);
+        primaryStage.setTitle("Home | V0.1-beta");
+        primaryStage.setResizable(false);
+        primaryStage.show();
     }
 
     public static void main(String[] args) 
