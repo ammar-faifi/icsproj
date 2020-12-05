@@ -1,30 +1,19 @@
 
-import java.text.DateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
-
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Application;
-import javafx.event.Event;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.scene.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 
 //This class is responsible for the info data:  timer, scores, and top score  
-
 public abstract class Game 
 {
-    private static final int WIDTH = 555;
-    private static final int HEIGHT = 333;
     private static Label timerLabel = new Label();
     protected static Timeline timeline;
     protected static int startSecond;
@@ -37,8 +26,6 @@ public abstract class Game
         HBox pane = new HBox(50);
                
         timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-            
-            Date date = new Date();
             Calendar cal = Calendar.getInstance();
             if (stop)
                 {
@@ -50,7 +37,7 @@ public abstract class Game
 
             timerLabel.setText((cal.get(Calendar.MINUTE) - startMinute) + ":" 
                 + (cal.get(Calendar.SECOND) - startSecond));
-            System.out.print("Running...");
+            System.out.println("Running...");
             
         }));
         timeline.setCycleCount(Animation.INDEFINITE);
@@ -70,7 +57,7 @@ public abstract class Game
         pane.getChildren().addAll(timerLabel, testButton);
         pane.setAlignment(Pos.CENTER);
 
-        return new Scene(pane, WIDTH, HEIGHT);
+        return new Scene(pane, Main.WIDTH, Main.HEIGHT);
     }
 
 }
