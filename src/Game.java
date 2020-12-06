@@ -23,127 +23,88 @@ public class Game extends Application
     private final int CELL_SIZE = 140;
     private int clickCount = 2;
     private Tile selected = null;
-    private Tile[] tile = new Tile[16];
-    private Pane root = new Pane();
     private HBox topPane = new HBox(50);
     private StackPane allPanes = new StackPane();
     private BorderPane mainPane = new BorderPane();
     private Scene ss = new Scene(allPanes, Home.WIDTH, Home.HEIGHT);
     private int startSecond;
     private int startMinute;
-    private boolean stop = true;
     private int currentScore;
+    private int correct;
+    private Image[] puzz = new Image[num_of_pairs];
+    private Tile[] tile = new Tile[16];
+    private static Pane root = new Pane();
     protected static Timeline timeline;
+    protected static boolean stop = true;
+    private static ArrayList<Tile> tiles = new ArrayList<>();
 
     @Override
     public void start(Stage primaryStage) throws Exception 
     {
         Scene homeScene = Home.scene(primaryStage, ss);
-        
-        ArrayList<Tile> tiles = new ArrayList<>();
-        Image[] puzz = new Image[num_of_pairs];
 
-        for (int i = 0; i < puzz.length; i++) {
-            puzz[i] = new Image("contents/" + i + ".jpeg");
-        }
-
-
-        for (int i = 0; i < num_of_pairs; i++) 
-        {
-            ImageView first = new ImageView(puzz[i]);
-            first.setFitHeight(CELL_SIZE);
-            first.setFitWidth(CELL_SIZE);
-
-            ImageView second = new ImageView(puzz[i]);
-            second.setFitHeight(CELL_SIZE);
-            second.setFitWidth(CELL_SIZE);
-
-            tiles.add(new Tile(first));
-            tiles.add(new Tile(second));
-        }
-
-
-        Collections.shuffle(tiles);
-
-        for (int i = 0; i < tiles.size(); i++)
-        {
-            tile[i] = tiles.get(i);
-
-            tile[i].setTranslateX(CELL_SIZE * (i % num_per_row) + 50);
-            tile[i].setTranslateY(CELL_SIZE * (i / num_per_row) + 25);
-
-            root.getChildren().add(tile[i]);
-        }
-
+        //Create images
+        for (int i = 0; i < puzz.length; i++)
+        puzz[i] = new Image("contents/" + i + ".jpeg");
+       
+        refresh();
 
         Button play = new Button("Play again");
         play.setId("play-button");
         play.setOnMouseClicked(n -> 
         {
+            timeline.play();
+            startMinute = startSecond = correct = 0;
 
-            for (int i = 0; i < tiles.size(); i++) 
-            {
-                tile[i].close();
-                root.getChildren().remove(tile[i]);
+            for (int i = 0; i < tiles.size(); i++)    
+            {         
+            tile[i].close();
+            tiles.get(i).close();
             }
-
-            Collections.shuffle(tiles);
-
+            
             for (int i = 0; i < tiles.size(); i++) 
-            {
-                tile[i] = tiles.get(i);
-
-                tile[i].setTranslateX(CELL_SIZE * (i % num_per_row));
-                tile[i].setTranslateY(CELL_SIZE * (i / num_per_row));
-
-                root.getChildren().remove(tile[i]);
-                root.getChildren().add(tile[i]);
-            }
+            root.getChildren().remove(tile[i]);
+            
+            refresh();
         });
 
         // Header: time scores buttons
         Label score = new Label("Your Score:" + currentScore);
         Label time = new Label("Time:" + startMinute + ":" + startSecond);
-
         timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> 
         {
-            if (stop)
-            {
+            if (stop) {
                 startSecond = 0;
                 startMinute = 0;
                 stop = false;
-            }
-            else
-            {
-                if (startSecond == 59)
+            } else {
+                if (startSecond == 59) 
                 {
                     startSecond = 0;
                     startMinute++;
-                }
+                } 
                 else startSecond++;
             }
-            time.setText("Time:" + startMinute + ":" + startSecond);    
+            time.setText("Time:" + startMinute + ":" + startSecond);
         }));
         timeline.setCycleCount(Animation.INDEFINITE);
-        
-        
-        
-        Button endButton = new Button("END the Game !!");
+
+        Button endButton = new Button("PAUSE the Game !!");
         endButton.setId("end-button");
-        endButton.setOnAction(event -> 
-        {
+        endButton.setOnAction(event -> {
+            stop = false;
             timeline.pause();
             primaryStage.setScene(homeScene);
-            primaryStage.setTitle("Home | V0.1-beta");
-            stop = true;
+            primaryStage.setTitle("Home | V0.1");
         });
-        
+
+        //background
         ImageView background = new ImageView(new Image("contents/background2.jpg"));
         background.setId("home-background-img2");
         background.setFitWidth(Home.WIDTH);
         background.setFitHeight(Home.HEIGHT);
 
-        //Setting layout
+        // Setting layout
         topPane.setMinHeight(50);
         topPane.setId("game-header");
         topPane.getChildren().addAll(time, score, endButton, play);
@@ -159,9 +120,34 @@ public class Game extends Application
         primaryStage.show();
     }
 
-
     public static void main(String[] args)
     {launch(args);}
+
+    //set images and locate them randomly
+    public void refresh() 
+    {   
+        if (stop)
+            for (int i = 0; i < num_of_pairs; i++) 
+            {
+                ImageView first = new ImageView(puzz[i]);
+                first.setFitHeight(CELL_SIZE);
+                first.setFitWidth(CELL_SIZE);
+                ImageView second = new ImageView(puzz[i]);
+                second.setFitHeight(CELL_SIZE);
+                second.setFitWidth(CELL_SIZE);
+
+                tiles.add(new Tile(first));
+                tiles.add(new Tile(second));
+            }
+            
+            Collections.shuffle(tiles);
+            for (int i = 0; i < tiles.size(); i++) {
+                tile[i] = tiles.get(i);
+                tile[i].setTranslateX(CELL_SIZE * (i % num_per_row) + 50);
+                tile[i].setTranslateY(CELL_SIZE * (i / num_per_row) + 25);
+                root.getChildren().add(tile[i]);
+            }
+    }
 
 
     class Tile extends StackPane 
@@ -182,7 +168,6 @@ public class Game extends Application
 
         public void handleMouseClick(MouseEvent event) 
         {
-
             if (isOpen() || clickCount == 0)
                 return;
             clickCount--;
@@ -209,6 +194,9 @@ public class Game extends Application
                         MediaPlayer mp = new MediaPlayer(new Media(f.toURI().toString()));
                         mp.play();
                         mp.setVolume(0.8);
+                        correct++;
+                        //if all cards open
+                        if (correct == 8) {timeline.pause(); stop=true;}
                     }
                     selected = null;
                     clickCount = 2;

@@ -46,12 +46,12 @@
 
 #play-button
 {
-    -fx-background-color: linear-gradient(rgb(240, 160, 167) 0%, rgb(212, 90, 100) 100%);
+    -fx-background-color: linear-gradient(rgb(212, 132, 139) 0%, rgb(212, 90, 100) 100%);
     -fx-text-fill: white;
 }
 #play-button:hover
 {
-    -fx-background-color: linear-gradient(rgb(212, 90, 100) 0%, rgb(240, 160, 167) 100%);
+    -fx-background-color: linear-gradient(rgb(212, 90, 100) 0%, rgb(211, 128, 135) 100%);
 }
 
 #end-button

@@ -6,11 +6,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.application.Application;
-import javafx.geometry.Pos;
 
 
 // This code is for manage the scenes and running them
-
 public abstract class Home extends Application 
 {
     protected static final int WIDTH = 666;
@@ -44,8 +42,7 @@ public abstract class Home extends Application
         vbox.getChildren().addAll(img, startButton);
         vbox.setId("home-vbox");
         pane.getChildren().addAll(background, vbox);
-
-            
+  
         return new Scene(pane, WIDTH, HEIGHT);
     }
 
