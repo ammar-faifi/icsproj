@@ -20,14 +20,15 @@ public class Game extends Application
 {
     private final int num_of_pairs = 8;
     private final int num_per_row = 4;
-    private final int CELL_SIZE = 150;
+    private final int CELL_SIZE = 140;
     private int clickCount = 2;
     private Tile selected = null;
     private Tile[] tile = new Tile[16];
     private Pane root = new Pane();
     private HBox topPane = new HBox(50);
+    private StackPane allPanes = new StackPane();
     private BorderPane mainPane = new BorderPane();
-    private Scene ss = new Scene(mainPane, Home.WIDTH, Home.HEIGHT);
+    private Scene ss = new Scene(allPanes, Home.WIDTH, Home.HEIGHT);
     private int startSecond;
     private int startMinute;
     private boolean stop = true;
@@ -68,8 +69,8 @@ public class Game extends Application
         {
             tile[i] = tiles.get(i);
 
-            tile[i].setTranslateX(CELL_SIZE * (i % num_per_row));
-            tile[i].setTranslateY(CELL_SIZE * (i / num_per_row));
+            tile[i].setTranslateX(CELL_SIZE * (i % num_per_row) + 50);
+            tile[i].setTranslateY(CELL_SIZE * (i / num_per_row) + 25);
 
             root.getChildren().add(tile[i]);
         }
@@ -77,7 +78,6 @@ public class Game extends Application
 
         Button play = new Button("Play again");
         play.setId("play-button");
-
         play.setOnMouseClicked(n -> 
         {
 
@@ -138,6 +138,11 @@ public class Game extends Application
             stop = true;
         });
         
+        ImageView background = new ImageView(new Image("contents/background2.jpg"));
+        background.setId("home-background-img2");
+        background.setFitWidth(Home.WIDTH);
+        background.setFitHeight(Home.HEIGHT);
+
         //Setting layout
         topPane.setMinHeight(50);
         topPane.setId("game-header");
@@ -145,6 +150,7 @@ public class Game extends Application
         topPane.setAlignment(Pos.CENTER);
         mainPane.setTop(topPane);
         mainPane.setCenter(root);
+        allPanes.getChildren().addAll(background, mainPane);
         homeScene.getStylesheets().add("style.css");
         ss.getStylesheets().add("style.css");
 
@@ -161,7 +167,6 @@ public class Game extends Application
     class Tile extends StackPane 
     {
         ImageView image;
-        StackPane pane = new StackPane();
 
         Tile(ImageView image) 
         {

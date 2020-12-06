@@ -23,7 +23,11 @@
     -fx-opacity: 0.2;
     -fx-rotate: 0.5;
 }
-
+#home-background-img2
+{
+    -fx-opacity: 0.05;
+    -fx-rotate: 0.5;
+}
 
 .label
 {
