@@ -11,20 +11,16 @@ import javafx.geometry.Pos;
 
 // This code is for manage the scenes and running them
 
-public class Main extends Application 
+public abstract class Home extends Application 
 {
     protected static final int WIDTH = 666;
     protected static final int HEIGHT = 677;
-    private VBox vbox = new VBox(50);
-    private StackPane pane = new StackPane();
+    private static VBox vbox = new VBox(50);
+    private static StackPane pane = new StackPane();
 
 
-    @Override
-    public void start(Stage primaryStage) throws Exception 
+    protected static Scene scene(Stage primaryStage, Scene scene) throws Exception 
     {
-        Scene homeScene = new Scene(pane, WIDTH, HEIGHT);
-        Scene gameScene = Game.scene(primaryStage, homeScene);
-
         // Layout objects
         ImageView img = new ImageView(new Image("proj.png"));
         img.setFitWidth(WIDTH/2);
@@ -40,7 +36,7 @@ public class Main extends Application
 
         testButton.setOnAction(event -> 
         {
-            primaryStage.setScene(gameScene);
+            primaryStage.setScene(scene);
             primaryStage.setTitle("Gamming");
             Game.timeline.play();
         });
@@ -48,13 +44,8 @@ public class Main extends Application
         vbox.setAlignment(Pos.CENTER);
         vbox.getChildren().addAll(img, testButton);
         pane.getChildren().addAll(background, vbox);
-        
-        homeScene.getStylesheets().add("style.css");
-        gameScene.getStylesheets().add("style.css");
-        primaryStage.setScene(homeScene);
-        primaryStage.setTitle("Home | V0.1-beta");
-        primaryStage.setResizable(false);
-        primaryStage.show();
+            
+        return new Scene(pane, WIDTH, HEIGHT);
     }
 
     public static void main(String[] args) 
