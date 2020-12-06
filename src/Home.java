@@ -26,24 +26,25 @@ public abstract class Home extends Application
         img.setFitWidth(WIDTH/2);
         img.setFitHeight(HEIGHT/2);
 
-        // ImageView background = new ImageView(new Image("background.png"));
         ImageView background = new ImageView(new Image("contents/background.png"));
         background.setId("home-background-img");
         background.setFitWidth(WIDTH);
         background.setFitHeight(HEIGHT);
-
-        Button testButton = new Button("Start the Game Now!");
-
-        testButton.setOnAction(event -> 
+        
+        Button startButton = new Button("Start the Game Now!");
+        startButton.setId("start-button");
+        
+        startButton.setOnAction(event -> 
         {
             primaryStage.setScene(scene);
             primaryStage.setTitle("Gamming");
             Game.timeline.play();
         });
         
-        vbox.setAlignment(Pos.CENTER);
-        vbox.getChildren().addAll(img, testButton);
+        vbox.getChildren().addAll(img, startButton);
+        vbox.setId("home-vbox");
         pane.getChildren().addAll(background, vbox);
+
             
         return new Scene(pane, WIDTH, HEIGHT);
     }

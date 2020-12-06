@@ -1,20 +1,13 @@
 // package sample;
-
-import javafx.animation.Animation;
-import javafx.animation.FadeTransition;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+import javafx.animation.*;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.control.*;
+import javafx.scene.image.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -27,6 +20,7 @@ public class Game extends Application
 {
     private final int num_of_pairs = 8;
     private final int num_per_row = 4;
+    private final int CELL_SIZE = 150;
     private int clickCount = 2;
     private Tile selected = null;
     private Tile[] tile = new Tile[16];
@@ -56,12 +50,12 @@ public class Game extends Application
         for (int i = 0; i < num_of_pairs; i++) 
         {
             ImageView first = new ImageView(puzz[i]);
-            first.setFitHeight(120);
-            first.setFitWidth(120);
+            first.setFitHeight(CELL_SIZE);
+            first.setFitWidth(CELL_SIZE);
 
             ImageView second = new ImageView(puzz[i]);
-            second.setFitHeight(120);
-            second.setFitWidth(120);
+            second.setFitHeight(CELL_SIZE);
+            second.setFitWidth(CELL_SIZE);
 
             tiles.add(new Tile(first));
             tiles.add(new Tile(second));
@@ -74,13 +68,15 @@ public class Game extends Application
         {
             tile[i] = tiles.get(i);
 
-            tile[i].setTranslateX(120 * (i % num_per_row));
-            tile[i].setTranslateY(120 * (i / num_per_row));
+            tile[i].setTranslateX(CELL_SIZE * (i % num_per_row));
+            tile[i].setTranslateY(CELL_SIZE * (i / num_per_row));
 
             root.getChildren().add(tile[i]);
         }
-        Button play = new Button("play");
 
+
+        Button play = new Button("Play again");
+        play.setId("play-button");
 
         play.setOnMouseClicked(n -> 
         {
@@ -97,8 +93,8 @@ public class Game extends Application
             {
                 tile[i] = tiles.get(i);
 
-                tile[i].setTranslateX(120 * (i % num_per_row));
-                tile[i].setTranslateY(120 * (i / num_per_row));
+                tile[i].setTranslateX(CELL_SIZE * (i % num_per_row));
+                tile[i].setTranslateY(CELL_SIZE * (i / num_per_row));
 
                 root.getChildren().remove(tile[i]);
                 root.getChildren().add(tile[i]);
@@ -106,30 +102,34 @@ public class Game extends Application
         });
 
         // Header: time scores buttons
-        Label timeLabel = new Label("Time:");
-        Label scoreLabel = new Label("Your Score:");
-        Label score = new Label(Integer.toString(currentScore));
-        Label time = new Label();
+        Label score = new Label("Your Score:" + currentScore);
+        Label time = new Label("Time:" + startMinute + ":" + startSecond);
 
-        timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-            Calendar cal = Calendar.getInstance();
+        timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> 
+        {
             if (stop)
             {
-                startSecond = cal.get(Calendar.SECOND);
-                startMinute = cal.get(Calendar.MINUTE);
+                startSecond = 0;
+                startMinute = 0;
                 stop = false;
             }
-            time.setText((cal.get(Calendar.MINUTE) - startMinute) + ":" 
-            + (cal.get(Calendar.SECOND) - startSecond));
-            System.out.println("Running...");
-            
-            
+            else
+            {
+                if (startSecond == 59)
+                {
+                    startSecond = 0;
+                    startMinute++;
+                }
+                else startSecond++;
+            }
+            time.setText("Time:" + startMinute + ":" + startSecond);    
         }));
         timeline.setCycleCount(Animation.INDEFINITE);
         
         
         
         Button endButton = new Button("END the Game !!");
+        endButton.setId("end-button");
         endButton.setOnAction(event -> 
         {
             timeline.pause();
@@ -139,8 +139,9 @@ public class Game extends Application
         });
         
         //Setting layout
+        topPane.setMinHeight(50);
         topPane.setId("game-header");
-        topPane.getChildren().addAll(timeLabel, time, scoreLabel, score, endButton, play);
+        topPane.getChildren().addAll(time, score, endButton, play);
         topPane.setAlignment(Pos.CENTER);
         mainPane.setTop(topPane);
         mainPane.setCenter(root);
@@ -154,22 +155,18 @@ public class Game extends Application
 
 
     public static void main(String[] args)
-        {launch(args);}
-
-
-    public void refresh() 
-    {
-    }
+    {launch(args);}
 
 
     class Tile extends StackPane 
     {
         ImageView image;
+        StackPane pane = new StackPane();
 
         Tile(ImageView image) 
         {
             this.image = image;
-            Rectangle border = new Rectangle(120, 120);
+            Rectangle border = new Rectangle(CELL_SIZE, CELL_SIZE);
             border.setFill(null);
             border.setStroke(Color.BLACK);
             getChildren().addAll(this.image, border);
@@ -180,10 +177,6 @@ public class Game extends Application
 
         public void handleMouseClick(MouseEvent event) 
         {
-            File alertF = new File("contents/select.wav");
-            MediaPlayer alert = new MediaPlayer(new Media(alertF.toURI().toString()));
-            alert.play();
-            alert.setVolume(0.8);
 
             if (isOpen() || clickCount == 0)
                 return;
@@ -207,7 +200,7 @@ public class Game extends Application
 
                     else
                     {
-                        File f = new File("contents/danger.mp3");
+                        File f = new File("contents/win.wav");
                         MediaPlayer mp = new MediaPlayer(new Media(f.toURI().toString()));
                         mp.play();
                         mp.setVolume(0.8);

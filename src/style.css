@@ -1,20 +1,16 @@
-.root
+.root, #home-vbox, .stack-pane
 {
-    
+    -fx-font-family: serif;
+    -fx-alignment: center;
 }
 
-#home-background-img
-{
-    -fx-opacity: 0.2;
-    -fx-rotate: 0.5;
-}
+
 
 .button
 {
     -fx-background-weight: bold;
     -fx-background-radius: 10;
     -fx-text-fill: gray;
-    -fx-scale-y: 1;
     -fx-cursor: hand;
 }
 
@@ -22,14 +18,56 @@
 {
     -fx-translate-y:2px;
 }
+#home-background-img
+{
+    -fx-opacity: 0.2;
+    -fx-rotate: 0.5;
+}
+
+
+.label
+{
+    -fx-font-size: 20;
+    -fx-font-family: serif;
+}
 
 #game-header
 {
-    -fx-background-color: rgb(218, 218, 218);
-    -fx-scale-y: 1
+    -fx-background-color: rgb(179, 197, 206);
+    -fx-alignment: center;
+    -fx-background-insets: 5, 5, 5, 5;
+    -fx-background-radius: 10;
 }
 
-#start-game
+
+#play-button
 {
-    -fx-background-color: white;
+    -fx-background-color: linear-gradient(rgb(240, 160, 167) 0%, rgb(212, 90, 100) 100%);
+    -fx-text-fill: white;
+}
+#play-button:hover
+{
+    -fx-background-color: linear-gradient(rgb(212, 90, 100) 0%, rgb(240, 160, 167) 100%);
+}
+
+#end-button
+{
+    -fx-background-color: rgb(90, 143, 212);
+    -fx-text-fill: white;
+}
+#end-button:hover
+{
+    -fx-background-color: rgb(154, 192, 241);
+}
+
+
+#start-button
+{
+    -fx-background-color: rgb(90, 143, 212);
+    -fx-text-fill: white;
+    -fx-font-size: 20;
+}
+#start-button:hover
+{
+    -fx-background-color: rgb(154, 192, 241);
 }
