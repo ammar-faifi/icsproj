@@ -49,7 +49,7 @@ public class Game extends Application
         Image[] puzz = new Image[num_of_pairs];
 
         for (int i = 0; i < puzz.length; i++) {
-            puzz[i] = new Image(new File(i + ".jpeg").toURI().toString());
+            puzz[i] = new Image("contents/" + i + ".jpeg");
         }
 
 
@@ -180,7 +180,7 @@ public class Game extends Application
 
         public void handleMouseClick(MouseEvent event) 
         {
-            File alertF = new File("select.wav");
+            File alertF = new File("contents/select.wav");
             MediaPlayer alert = new MediaPlayer(new Media(alertF.toURI().toString()));
             alert.play();
             alert.setVolume(0.8);
@@ -207,7 +207,7 @@ public class Game extends Application
 
                     else
                     {
-                        File f = new File("danger.mp3");
+                        File f = new File("contents/danger.mp3");
                         MediaPlayer mp = new MediaPlayer(new Media(f.toURI().toString()));
                         mp.play();
                         mp.setVolume(0.8);

@@ -22,12 +22,12 @@ public abstract class Home extends Application
     protected static Scene scene(Stage primaryStage, Scene scene) throws Exception 
     {
         // Layout objects
-        ImageView img = new ImageView(new Image("proj.png"));
+        ImageView img = new ImageView(new Image("contents/proj.png"));
         img.setFitWidth(WIDTH/2);
         img.setFitHeight(HEIGHT/2);
 
         // ImageView background = new ImageView(new Image("background.png"));
-        ImageView background = new ImageView(new Image("background.png"));
+        ImageView background = new ImageView(new Image("contents/background.png"));
         background.setId("home-background-img");
         background.setFitWidth(WIDTH);
         background.setFitHeight(HEIGHT);
