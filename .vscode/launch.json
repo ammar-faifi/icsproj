@@ -9,7 +9,13 @@
        
     },
     "configurations": [
- 
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Game",
+            "request": "launch",
+            "mainClass": "Game",
+            "projectName": "icsproj_df4de5f9"
+        },
         {
             "type": "java",
             "name": "Debug (Launch) - Current File",

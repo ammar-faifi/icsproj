@@ -116,6 +116,7 @@ public class Game extends Application
         ss.getStylesheets().add("style.css");
 
         primaryStage.setScene(homeScene);
+        primaryStage.setTitle("Home");
         primaryStage.setResizable(false);
         primaryStage.show();
     }

@@ -20,7 +20,15 @@
         "/Users/ammaralfaifi/projects/java/javafx-sdk-16/lib/javafx.graphics.jar",
         "/Users/ammaralfaifi/projects/java/javafx-sdk-16/lib/javafx.media.jar",
         "/Users/ammaralfaifi/projects/java/javafx-sdk-16/lib/javafx.swing.jar",
-        "/Users/ammaralfaifi/projects/java/javafx-sdk-16/lib/javafx.web.jar"
+        "/Users/ammaralfaifi/projects/java/javafx-sdk-16/lib/javafx.web.jar",
+        "/Users/ammaralfaifi/Documents/projects/java/javafx-sdk-16/lib/javafx-swt.jar",
+        "/Users/ammaralfaifi/Documents/projects/java/javafx-sdk-16/lib/javafx.base.jar",
+        "/Users/ammaralfaifi/Documents/projects/java/javafx-sdk-16/lib/javafx.controls.jar",
+        "/Users/ammaralfaifi/Documents/projects/java/javafx-sdk-16/lib/javafx.fxml.jar",
+        "/Users/ammaralfaifi/Documents/projects/java/javafx-sdk-16/lib/javafx.graphics.jar",
+        "/Users/ammaralfaifi/Documents/projects/java/javafx-sdk-16/lib/javafx.media.jar",
+        "/Users/ammaralfaifi/Documents/projects/java/javafx-sdk-16/lib/javafx.swing.jar",
+        "/Users/ammaralfaifi/Documents/projects/java/javafx-sdk-16/lib/javafx.web.jar"
     ],
 	
 }
