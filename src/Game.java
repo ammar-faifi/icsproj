@@ -23,7 +23,7 @@ public class Game extends Application
     private final int CELL_SIZE = 140;
     private int clickCount = 2;
     private Tile selected = null;
-    private HBox topPane = new HBox(50);
+    private HBox topPane = new HBox(40);
     private StackPane allPanes = new StackPane();
     private BorderPane mainPane = new BorderPane();
     private Scene ss = new Scene(allPanes, Home.WIDTH, Home.HEIGHT);
@@ -42,22 +42,22 @@ public class Game extends Application
     @Override
     public void start(Stage primaryStage) throws Exception 
     {
+        Scene homeScene = Home.scene(primaryStage, ss);
     	
-    	FileOutputStream highscoreoutput = new FileOutputStream("/Users/abdulrahmanazhar/Desktop/highscore.txt");
+    	FileOutputStream highscoreoutput = new FileOutputStream("highscore.txt");
     	PrintWriter pr = new PrintWriter(highscoreoutput);
     	pr.print(0);
     	pr.close();
     	
-    	FileInputStream highscoreinput = new FileInputStream("/Users/abdulrahmanazhar/Desktop/highscore.txt");
+    	FileInputStream highscoreinput = new FileInputStream("highscore.txt");
     	Scanner in = new Scanner(highscoreinput);
-    	highScore = in.nextInt();
+        highScore = in.nextInt();
+        in.close();
     	
-        Scene homeScene = Home.scene(primaryStage, ss);
 
         //Create images
         for (int i = 0; i < puzz.length; i++)
-        puzz[i] = new Image( + i + ".jpeg");
-       
+        puzz[i] = new Image("contents/" + i + ".jpeg");   
         refresh();
 
         Button play = new Button("Play again");
@@ -67,16 +67,11 @@ public class Game extends Application
             timeline.play();
             startMinute = startSecond = correct = currentScore = 0;
 
-            for (int i = 0; i < tiles.size(); i++)    
-            {         
-            tile[i].close();
-            tiles.get(i).close();
-            }
-            
             for (int i = 0; i < tiles.size(); i++) 
             root.getChildren().remove(tile[i]);
             
             refresh();
+            hide();
         });
 
         // Header: time scores buttons
@@ -87,6 +82,7 @@ public class Game extends Application
             if (stop) {
                 startSecond = 0;
                 startMinute = 0;
+                hide();
                 stop = false;
                 
             } else {
@@ -112,7 +108,7 @@ public class Game extends Application
         });
 
         //background
-        ImageView background = new ImageView(new Image("background2.jpg"));
+        ImageView background = new ImageView(new Image("contents/background2.jpg"));
         background.setId("home-background-img2");
         background.setFitWidth(Home.WIDTH);
         background.setFitHeight(Home.HEIGHT);
@@ -140,6 +136,7 @@ public class Game extends Application
     public void refresh() 
     {   
         if (stop)
+        {
             for (int i = 0; i < num_of_pairs; i++) 
             {
                 ImageView first = new ImageView(puzz[i]);
@@ -152,14 +149,30 @@ public class Game extends Application
                 tiles.add(new Tile(first));
                 tiles.add(new Tile(second));
             }
-            
-            Collections.shuffle(tiles);
-            for (int i = 0; i < tiles.size(); i++) {
-                tile[i] = tiles.get(i);
-                tile[i].setTranslateX(CELL_SIZE * (i % num_per_row) + 50);
-                tile[i].setTranslateY(CELL_SIZE * (i / num_per_row) + 25);
-                root.getChildren().add(tile[i]);
-            }
+        } 
+        Collections.shuffle(tiles);
+        for (int i = 0; i < tiles.size(); i++) {
+            tile[i] = tiles.get(i);
+            tile[i].setTranslateX(CELL_SIZE * (i % num_per_row) + 50);
+            tile[i].setTranslateY(CELL_SIZE * (i / num_per_row) + 25);
+            root.getChildren().add(tile[i]);
+        }
+        
+    }
+
+    public void hide()
+    {
+        try {
+            Thread.sleep(2000);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        for (int i = 0; i < tiles.size(); i++)    
+        {         
+            // tile[i].close();
+            tiles.get(i).close();
+        }
     }
 
 
@@ -176,7 +189,7 @@ public class Game extends Application
             getChildren().addAll(this.image, border);
             setOnMouseClicked(this::handleMouseClick);
 
-            close();
+            // close();
         }
 
         public void handleMouseClick(MouseEvent event) 
@@ -204,12 +217,11 @@ public class Game extends Application
 
                     else
                     {
-                        File f = new File("win.wav");
-                        MediaPlayer mp = new MediaPlayer(new Media("file:///Users/abdulrahmanazhar/Desktop/CPex/src/win.wav"));
+                        MediaPlayer mp = new MediaPlayer(new Media(new File("contents/win.wav").toURI().toString()));
                         mp.play();
                         mp.setVolume(0.8);
                         correct++;
-                        currentScore = currentScore + 10;
+                        currentScore += 10;
                         
                         //if all cards open
                         if (correct == 8) {
@@ -218,17 +230,14 @@ public class Game extends Application
                         	if(currentScore > highScore) {
                         		highScore = currentScore;
                         		
-								try {
-									FileOutputStream highScoreOutput = new FileOutputStream("/Users/abdulrahmanazhar/Desktop/highscore.txt");
-									PrintWriter pr = new PrintWriter(highScoreOutput);
+                                try (PrintWriter pr = new PrintWriter(new File("highscore.txt")))
+                                {
 	                            	pr.print(highScore);
-	                            	pr.close();
-								} catch (FileNotFoundException e) {
-									
+                                } catch (FileNotFoundException e) 
+                                {
+									System.out.println(e);
 								}
-                            	
                         	}
-                        
                         }
                     }
                     selected = null;

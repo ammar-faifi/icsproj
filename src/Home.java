@@ -11,8 +11,8 @@ import javafx.application.Application;
 // This code is for manage the scenes and running them
 public abstract class Home extends Application 
 {
-    protected static final int WIDTH = 666;
-    protected static final int HEIGHT = 677;
+    protected static final int WIDTH = 677;
+    protected static final int HEIGHT = 688;
     private static VBox vbox = new VBox(50);
     private static StackPane pane = new StackPane();
 
