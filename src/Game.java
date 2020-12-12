@@ -1,4 +1,4 @@
-// package sample;
+
 import javafx.animation.*;
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -12,7 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import java.io.File;
+import java.io.*;
 import java.util.*;
 
 
@@ -31,6 +31,7 @@ public class Game extends Application
     private int startMinute;
     private int currentScore;
     private int correct;
+    private int highScore;
     private Image[] puzz = new Image[num_of_pairs];
     private Tile[] tile = new Tile[16];
     private static Pane root = new Pane();
@@ -41,11 +42,21 @@ public class Game extends Application
     @Override
     public void start(Stage primaryStage) throws Exception 
     {
+    	
+    	FileOutputStream highscoreoutput = new FileOutputStream("/Users/abdulrahmanazhar/Desktop/highscore.txt");
+    	PrintWriter pr = new PrintWriter(highscoreoutput);
+    	pr.print(0);
+    	pr.close();
+    	
+    	FileInputStream highscoreinput = new FileInputStream("/Users/abdulrahmanazhar/Desktop/highscore.txt");
+    	Scanner in = new Scanner(highscoreinput);
+    	highScore = in.nextInt();
+    	
         Scene homeScene = Home.scene(primaryStage, ss);
 
         //Create images
         for (int i = 0; i < puzz.length; i++)
-        puzz[i] = new Image("contents/" + i + ".jpeg");
+        puzz[i] = new Image( + i + ".jpeg");
        
         refresh();
 
@@ -54,7 +65,7 @@ public class Game extends Application
         play.setOnMouseClicked(n -> 
         {
             timeline.play();
-            startMinute = startSecond = correct = 0;
+            startMinute = startSecond = correct = currentScore = 0;
 
             for (int i = 0; i < tiles.size(); i++)    
             {         
@@ -69,7 +80,7 @@ public class Game extends Application
         });
 
         // Header: time scores buttons
-        Label score = new Label("Your Score:" + currentScore);
+        Label score = new Label("Your Score:" + currentScore + "   High Score: "+ highScore);
         Label time = new Label("Time:" + startMinute + ":" + startSecond);
         timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> 
         {
@@ -77,6 +88,7 @@ public class Game extends Application
                 startSecond = 0;
                 startMinute = 0;
                 stop = false;
+                
             } else {
                 if (startSecond == 59) 
                 {
@@ -86,6 +98,7 @@ public class Game extends Application
                 else startSecond++;
             }
             time.setText("Time:" + startMinute + ":" + startSecond);
+            score.setText("Your Score:" + currentScore+ "   High Score: "+ highScore);
         }));
         timeline.setCycleCount(Animation.INDEFINITE);
 
@@ -99,7 +112,7 @@ public class Game extends Application
         });
 
         //background
-        ImageView background = new ImageView(new Image("contents/background2.jpg"));
+        ImageView background = new ImageView(new Image("background2.jpg"));
         background.setId("home-background-img2");
         background.setFitWidth(Home.WIDTH);
         background.setFitHeight(Home.HEIGHT);
@@ -116,7 +129,6 @@ public class Game extends Application
         ss.getStylesheets().add("style.css");
 
         primaryStage.setScene(homeScene);
-        primaryStage.setTitle("Home");
         primaryStage.setResizable(false);
         primaryStage.show();
     }
@@ -187,17 +199,37 @@ public class Game extends Application
                     {
                         selected.close();
                         this.close();
+                        currentScore = currentScore -2;
                     }
 
                     else
                     {
-                        File f = new File("contents/win.wav");
-                        MediaPlayer mp = new MediaPlayer(new Media(f.toURI().toString()));
+                        File f = new File("win.wav");
+                        MediaPlayer mp = new MediaPlayer(new Media("file:///Users/abdulrahmanazhar/Desktop/CPex/src/win.wav"));
                         mp.play();
                         mp.setVolume(0.8);
                         correct++;
+                        currentScore = currentScore + 10;
+                        
                         //if all cards open
-                        if (correct == 8) {timeline.pause(); stop=true;}
+                        if (correct == 8) {
+                        	timeline.pause();
+                        	stop=true;
+                        	if(currentScore > highScore) {
+                        		highScore = currentScore;
+                        		
+								try {
+									FileOutputStream highScoreOutput = new FileOutputStream("/Users/abdulrahmanazhar/Desktop/highscore.txt");
+									PrintWriter pr = new PrintWriter(highScoreOutput);
+	                            	pr.print(highScore);
+	                            	pr.close();
+								} catch (FileNotFoundException e) {
+									
+								}
+                            	
+                        	}
+                        
+                        }
                     }
                     selected = null;
                     clickCount = 2;
@@ -229,6 +261,6 @@ public class Game extends Application
         public boolean hasSameValue(Tile other) 
         {
             return image.getImage().equals(other.image.getImage());
-        }
+        }        
     }
 }
