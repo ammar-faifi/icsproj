@@ -32,6 +32,7 @@ public class Game extends Application
     private int currentScore;
     private int correct;
     private int highScore;
+    private Label score ;
     private Image[] puzz = new Image[num_of_pairs];
     private Tile[] tile = new Tile[16];
     private static Pane root = new Pane();
@@ -43,49 +44,51 @@ public class Game extends Application
     public void start(Stage primaryStage) throws Exception 
     {
         Scene homeScene = Home.scene(primaryStage, ss);
-    	
-    	FileOutputStream highscoreoutput = new FileOutputStream("highscore.txt");
-    	PrintWriter pr = new PrintWriter(highscoreoutput);
-    	pr.print(0);
-    	pr.close();
-    	
-    	FileInputStream highscoreinput = new FileInputStream("highscore.txt");
-    	Scanner in = new Scanner(highscoreinput);
-        highScore = in.nextInt();
-        in.close();
-    	
+
+        // Check the last high score
+        File highscoreinput = new File("highscore.txt");
+        if (highscoreinput.exists())
+        {
+            Scanner in = new Scanner(highscoreinput);
+            highScore = in.nextInt();
+            in.close();
+        }
+    	else highScore = 0;
 
         //Create images
         for (int i = 0; i < puzz.length; i++)
         puzz[i] = new Image("contents/" + i + ".jpeg");   
-        refresh();
+        refresh(true);
 
+        //play again button
         Button play = new Button("Play again");
         play.setId("play-button");
         play.setOnMouseClicked(n -> 
         {
+            correct = 0;
+            stop = true;
             timeline.play();
-            startMinute = startSecond = correct = currentScore = 0;
 
             for (int i = 0; i < tiles.size(); i++) 
             root.getChildren().remove(tile[i]);
             
-            refresh();
-            hide();
+            refresh(false);
         });
 
         // Header: time scores buttons
-        Label score = new Label("Your Score:" + currentScore + "   High Score: "+ highScore);
+        score = new Label("Your Score:" + currentScore + "  High Score: "+ highScore);
         Label time = new Label("Time:" + startMinute + ":" + startSecond);
         timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> 
         {
             if (stop) {
                 startSecond = 0;
                 startMinute = 0;
-                hide();
+                hideAll();
                 stop = false;
                 
-            } else {
+            } 
+            //increment time
+            else {
                 if (startSecond == 59) 
                 {
                     startSecond = 0;
@@ -93,11 +96,12 @@ public class Game extends Application
                 } 
                 else startSecond++;
             }
+            // update time
             time.setText("Time:" + startMinute + ":" + startSecond);
-            score.setText("Your Score:" + currentScore+ "   High Score: "+ highScore);
         }));
         timeline.setCycleCount(Animation.INDEFINITE);
 
+        //Pause button
         Button endButton = new Button("PAUSE the Game !!");
         endButton.setId("end-button");
         endButton.setOnAction(event -> {
@@ -133,9 +137,9 @@ public class Game extends Application
     {launch(args);}
 
     //set images and locate them randomly
-    public void refresh() 
+    public void refresh(boolean first_time) 
     {   
-        if (stop)
+        if (first_time)
         {
             for (int i = 0; i < num_of_pairs; i++) 
             {
@@ -155,12 +159,14 @@ public class Game extends Application
             tile[i] = tiles.get(i);
             tile[i].setTranslateX(CELL_SIZE * (i % num_per_row) + 50);
             tile[i].setTranslateY(CELL_SIZE * (i / num_per_row) + 25);
+            tile[i].open(() ->{});
             root.getChildren().add(tile[i]);
         }
         
     }
 
-    public void hide()
+    //to hide all tiles
+    public void hideAll()
     {
         try {
             Thread.sleep(2000);
@@ -170,12 +176,16 @@ public class Game extends Application
 
         for (int i = 0; i < tiles.size(); i++)    
         {         
-            // tile[i].close();
             tiles.get(i).close();
         }
     }
 
+    public void updateScores()
+    {
+        score.setText("Your Score:" + currentScore + "   High Score: "+ highScore);
+    }
 
+    //Tile Class
     class Tile extends StackPane 
     {
         ImageView image;
@@ -188,8 +198,6 @@ public class Game extends Application
             border.setStroke(Color.BLACK);
             getChildren().addAll(this.image, border);
             setOnMouseClicked(this::handleMouseClick);
-
-            // close();
         }
 
         public void handleMouseClick(MouseEvent event) 
@@ -212,7 +220,8 @@ public class Game extends Application
                     {
                         selected.close();
                         this.close();
-                        currentScore = currentScore -2;
+                        currentScore -= 2;
+                        updateScores();
                     }
 
                     else
@@ -222,22 +231,25 @@ public class Game extends Application
                         mp.setVolume(0.8);
                         correct++;
                         currentScore += 10;
+                        updateScores();
                         
-                        //if all cards open
+                        //if all cards are open
                         if (correct == 8) {
-                        	timeline.pause();
-                        	stop=true;
-                        	if(currentScore > highScore) {
-                        		highScore = currentScore;
-                        		
+                            if(currentScore > highScore) {
+                                highScore = currentScore;
+                                
+                                //write the high score
                                 try (PrintWriter pr = new PrintWriter(new File("highscore.txt")))
                                 {
-	                            	pr.print(highScore);
+                                    pr.print(highScore);
+                                    currentScore = 0;
                                 } catch (FileNotFoundException e) 
                                 {
-									System.out.println(e);
+                                    System.out.println(e);
 								}
-                        	}
+                            }
+                            updateScores();
+                            timeline.stop();
                         }
                     }
                     selected = null;

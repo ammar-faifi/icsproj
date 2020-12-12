@@ -21,7 +21,7 @@ public abstract class Home extends Application
     {
         // Layout objects
         ImageView img = new ImageView(new Image("contents/proj.png"));
-        img.setFitWidth(WIDTH/2);
+        img.setFitWidth(WIDTH/2.1);
         img.setFitHeight(HEIGHT/2);
 
         ImageView background = new ImageView(new Image("contents/background.png"));
