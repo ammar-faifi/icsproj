@@ -125,8 +125,8 @@ public class Game extends Application
         mainPane.setTop(topPane);
         mainPane.setCenter(root);
         allPanes.getChildren().addAll(background, mainPane);
-        homeScene.getStylesheets().add("style.css");
-        ss.getStylesheets().add("style.css");
+        homeScene.getStylesheets().add("contents/style.css");
+        ss.getStylesheets().add(new File("contents/style.css").toURI().toString());
 
         primaryStage.setScene(homeScene);
         primaryStage.setResizable(false);
